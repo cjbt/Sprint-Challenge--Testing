@@ -61,6 +61,6 @@ describe('games', () => {
   describe('delete', () => {
     return request(server)
       .delete('/games/1')
-      .then(res => expect(res.status(200).toBe(200)));
+      .then(res => expect(res.status).toBe(200));
   });
 });

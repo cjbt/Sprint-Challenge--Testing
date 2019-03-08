@@ -57,4 +57,11 @@ server.post('/games', (req, res) => {
   res.status(201).json(games);
 });
 
+server.delete('/games/:id', (req, res) => {
+  const { id } = req.params;
+
+  const game = games.filter(game => game.id != id);
+  res.json(game);
+});
+
 module.exports = server;
