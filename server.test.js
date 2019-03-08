@@ -15,10 +15,10 @@ describe('games', () => {
         .then(res => expect(res.status).toBe(200))
         .catch();
     });
-    it('should check if get all games returns an array with length of 5', () => {
+    it('should check if get all games returns an array', () => {
       return request(server)
         .get('/games')
-        .then(res => expect(JSON.parse(res.text)).toHaveLength(5))
+        .then(res => expect(res.body.length).toBeGreaterThan(0))
         .catch();
     });
     it('should get game by ID and give 200', () => {
@@ -30,10 +30,32 @@ describe('games', () => {
     it('should check if gameById returns a name', () => {
       return request(server)
         .get('/games/1')
-        .then(res =>
-          expect(JSON.parse(res.text)[0].name).toBe('Counter Strike')
-        )
+        .then(res => expect(res.body[0].name).toBe('Counter Strike'))
         .catch();
+    });
+  });
+  describe('post', () => {
+    it('should recieve 201 on post', () => {
+      return request(server)
+        .post('/games')
+        .send({ name: 'Lunia Online' })
+        .then(res => {
+          expect(res.status).toBe(201);
+        });
+    });
+    it('should return recent addition', () => {
+      return request(server)
+        .post('/games')
+        .send({ name: 'Runescape' })
+        .then(res => {
+          expect(res.body[res.body.length - 1].name).toBe('Runescape');
+        });
+    });
+    it('should return 422 if body is not provided', () => {
+      return request(server)
+        .post('/games')
+        .send()
+        .then(res => expect(res.status).toBe(422));
     });
   });
 });

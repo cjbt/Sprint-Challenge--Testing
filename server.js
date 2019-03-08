@@ -45,4 +45,16 @@ server.get('/games/:id', (req, res) => {
   }
 });
 
+server.post('/games', (req, res) => {
+  const { name } = req.body;
+  const newGame = { name, id: count };
+  if (!name) {
+    res.status(422).json({ message: 'enter name field' });
+  }
+
+  games.push(newGame);
+  count++;
+  res.status(201).json(games);
+});
+
 module.exports = server;
