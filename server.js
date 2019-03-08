@@ -2,32 +2,47 @@ const express = require('express');
 const server = express();
 server.use(express.json());
 
-const count = 6;
-const users = [
+let count = 6;
+const games = [
   {
-    name: 'CJ',
+    name: 'Counter Strike',
     id: 1
   },
   {
-    name: 'Hamza',
+    name: 'Dota',
     id: 2
   },
   {
-    name: 'Nathan',
+    name: 'Luna Online',
     id: 3
   },
   {
-    name: 'Joe',
+    name: 'World of Warcraft',
     id: 4
   },
   {
-    name: 'Kelly',
+    name: 'Street Fighter',
     id: 5
   }
 ];
 
 server.get('/', (req, res) => {
   res.send('<h1>site is working</h1>');
+});
+
+server.get('/games', (req, res) => {
+  res.json(games);
+});
+
+server.get('/games/:id', (req, res) => {
+  const id = req.params.id;
+  const selectedGame = games.find(game => game.id == id);
+
+  if (selectedGame) {
+    res.status(200).json(games);
+  } else {
+    res.status(404).json({ message: 'no id found' });
+  }
 });
 
 module.exports = server;

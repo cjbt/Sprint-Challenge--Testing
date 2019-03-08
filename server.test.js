@@ -1,7 +1,7 @@
 const request = require('supertest');
 const server = require('./server');
 
-describe('users', () => {
+describe('games', () => {
   describe('get', () => {
     it('should see if server is working', () => {
       return request(server)
@@ -9,25 +9,31 @@ describe('users', () => {
         .then(res => expect(res.status).toBe(200))
         .catch();
     });
-    it('should get all users with status 200', () => {
+    it('should get all games with status 200', () => {
       return request(server)
-        .get('./users')
-        .then(res => expect(res.status).toBe(200));
+        .get('/games')
+        .then(res => expect(res.status).toBe(200))
+        .catch();
     });
-    it('should check if get all users gives back an array', () => {
+    it('should check if get all games returns an array with length of 5', () => {
       return request(server)
-        .get('./users')
-        .then(res => expect(res).toHaveLength(0));
+        .get('/games')
+        .then(res => expect(JSON.parse(res.text)).toHaveLength(5))
+        .catch();
     });
-    it('should get user by ID and give 200', () => {
+    it('should get game by ID and give 200', () => {
       return request(server)
-        .get('./users/1')
-        .then(res => expect(res.status).toBe(200));
+        .get('/games/1')
+        .then(res => expect(res.status).toBe(200))
+        .catch();
     });
-    it('should check if userById returns a name', () => {
+    it('should check if gameById returns a name', () => {
       return request(server)
-        .get('./users/i')
-        .then(res => expect(res.name).toBe('CJ'));
+        .get('/games/1')
+        .then(res =>
+          expect(JSON.parse(res.text)[0].name).toBe('Counter Strike')
+        )
+        .catch();
     });
   });
 });
